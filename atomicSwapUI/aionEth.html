@@ -1,0 +1,36 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <meta charset="utf-8" />
+        <meta http-equiv="X-UA-Compatible" content="IE=edge">
+        <title>Atomic Swap</title>
+        <meta name="viewport" content="width=device-width, initial-scale=1">
+    </head>
+    <script src = "./ethWeb3.min.js"></script>
+    <script>
+        if (typeof window.ethereum !== 'undefined'
+        || (typeof window.web3 !== 'undefined')) {
+
+          // Web3 browser user detected. You can now use the provider.
+          const provider = window['ethereum'] || window.web3.currentProvider
+        }
+
+        ethProvider = window.web3.currentProvider;
+        aionProvider = window.aionweb3.currentProvider;
+
+        // aionweb3.eth.getAccounts()
+        // ["0xa07fecf3106317356c29c11b01b580e5e3aac91069c2b2eeda9137af5cdad63a"]
+
+        window.aionweb3.eth.getAccounts().then(function (accounts){
+            console.log("===================");
+            console.log("Current User status")
+            console.log("eth account:" + window.web3.selectedAddress);
+            console.log("eth account:" + accounts[0]);
+            console.log("===================");            
+        });
+
+
+
+    </script>
+
+</html>
