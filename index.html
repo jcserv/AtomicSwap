@@ -1,26 +1,31 @@
 <!DOCTYPE html>
-<html>
-    <head>
-        <meta charset="utf-8" />
-        <meta http-equiv="X-UA-Compatible" content="IE=edge">
-        <title>Atomic Swap</title>
-        <meta name="viewport" content="width=device-width, initial-scale=1">
-    </head>
-    <script src = "./web3.min.js"></script>
-    <script>
-        async function start_process(){
-            // let secret = web3.utils.randomHex(32) // Randomly generate the secret word
-            let hash_secret = web3.utils.sha3(secret) // Apply hash to it
-            let party_a = web3.eth.accounts.create(); // Party A
-            let party_b = web3.eth.accounts.create(); // Party B
-            var web3 = new Web3(new Web3.providers.WebsocketProvider("wss://mainnet.infura.io/ws"));
-            // web3.setProvider(new web3.providers.HttpProvider(“http:\/\/localhost:8545"))
-            let atomic_swap_contract = new web3.eth.Contract(ABI, address) // Instantiate the contract
-            
-            
 
-            atomic_swap_contract.
-        }
-    </script>
 
-</html>
+<head>
+        HEY!
+</head>
+
+<body>
+
+        <div class="position">
+
+            <h3 class='header'>Grant Access</h3>
+
+            <button id="grantAccess" type="button" class="button">Grant Access</button>
+            <div id="grantsAccess" class='hash'></div>
+            </div>
+        </div>
+
+        <div class="position">
+
+                <h3 class='header'>Read</h3>
+
+                <button id="getBalance" type="button" class="button">Get Balance</button>
+                <div id="balanceResult" class='hash'>
+                </div>
+
+        </div>
+
+        <script src="https://ajax.googleapis.com/ajax/libs/jquery/2.1.1/jquery.min.js"></script>
+        <script src="./index.js"></script>  
+<body>
