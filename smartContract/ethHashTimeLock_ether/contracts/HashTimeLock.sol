@@ -7,6 +7,7 @@ contract HashTimeLock{
 
     bytes32 public hashOfSecret;
     bytes public secret;
+    bool public isSecretPublished;
 
     uint private startBlockNumber;
     uint public endBlockNumber;
@@ -31,6 +32,7 @@ contract HashTimeLock{
         startBlockNumber = block.number;
         endBlockNumber = startBlockNumber + periodBlockNumber;
         hashOfSecret = _hashOfSecret;
+        isSecretPublished = false;
     }
 
     function returnToLocker() public{
@@ -38,9 +40,11 @@ contract HashTimeLock{
         assetLocker.transfer(address(this).balance);
     }
 
-    function sendToFetcher( bytes memory secret ) public{
+    function sendToFetcher( bytes memory _secret ) public{
         require( block.number < endBlockNumber );
-        require( keccak256(secret) == hashOfSecret );
+        require( keccak256(_secret) == hashOfSecret );
+        isSecretPublished = true;
+        secret = _secret;
         assetFetcher.transfer(address(this).balance);
     }
 
