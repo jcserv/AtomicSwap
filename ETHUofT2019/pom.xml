@@ -63,7 +63,7 @@
                             <goal>clean</goal>
                             <goal>init</goal>
                             <goal>prepack</goal>
-                            <!--<goal>class-verifier</goal>-->
+                            <goal>class-verifier</goal>
                         </goals>
                     </execution>
                 </executions>

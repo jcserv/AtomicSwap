@@ -1,0 +1,79 @@
+IMPORTANT COMMANDS:
+
+mvn clean install - compile our code
+mvn aion4j:deploy - run our code
+
+RESOURCES:
+https://github.com/BlockDevsUnited/Aion-AVM-Starter-Guide
+https://aionuoft.ca/
+https://learn.aion.network/docs/aion-deploy-java-smart-contract-maven
+
+1. Install Maven (https://docs.aion.network/docs/maven-and-aion4j-installation)
+
+   LINUX:
+   i. Update your package list:
+
+   sudo apt update
+
+   ii. Download and install Maven:
+
+   sudo apt install maven
+
+   MacOS
+
+   i. Install Homebrew if you haven't already:
+
+   /usr/bin/ruby -e "$(curl -fsSL https://raw.githubusercontent.com/Homebrew/install/master/install)"
+
+    ii. Download and install Maven:
+
+    brew install maven
+
+3. Sign up for nodesmith (https://dashboard.nodesmith.io/#/dashboard)
+   a. Select network -> testnet
+   b. Copy the endpoint but instead of aion/testnet/ make it aion/avmtestnet/
+
+4. Download the aiwa chrome extension & register an account (https://chrome.google.com/webstore/detail/aiwa/objigohafkcoodmofgmifblmfidicehc?hl=en)
+
+   a. Obtain your private key by clicking the gear icon under Wallet 1 -> Export private key -> Enter password -> View
+   b. On the top right, click on the dropdown arrow next to what should say Mainnet
+      - Select Custom with the following details:
+      - Paste our nodesmith endpoint link obtained in 3b into the url, should look something like this: https://api.nodesmith.io/v1/aion/avmtestnet/jsonrpc?apiKey=24fc6bb2fe1c444facce1fdbdc09a536
+      - #: 443
+
+4. Obtain test aion from https://faucets.blockxlabs.com/
+   a. Click AION
+   b. blockchain network: avm-testnet
+   c. Copy and paste the address of your wallet
+      Aiwa -> Under Aion wallet, receive -> Copy
+      
+   Note that there is a 24h limit + we will be charged 0.3 test aion for each computation (gas)
+   so don't go overboard with running our smartcontract
+
+5. In pom.xml, ensure that we have the following set:
+
+<properties>
+...
+    <aion4j.plugin.version>0.4.9</aion4j.plugin.version>
+...
+
+</properties>
+
+        <configuration>
+           <mode>remote</mode>
+           <avmLibDir>${avm.lib.dir}</avmLibDir>
+           <web3rpcUrl>https://api.nodesmith.io/v1/aion/avmtestnet/jsonrpc?apiKey=xxxxxxxxxxxxxx</web3rpcUrl> //NODESMITH ENDPOINT WE GOT FROM EARLIER
+        </configuration>
+        ...
+
+6. Set your environment variables
+
+On Mac and Linux:
+
+export pk=YOURPRIVATEKEY
+export web3rpc_url=YOURNODESMITHENDPOINT
+
+And now to run our smartcontract we run $> mvn aion4j:deploy -Premote
+
+
+
