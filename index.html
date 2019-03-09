@@ -12,10 +12,10 @@
             let secret = web3.utils.randomHex(32) // Randomly generate the secret word
             let hash_secret = web3.utils.sha3(secret) // Apply hash to it
             let web3 = new Web3(Web3.givenProvider); // Connect to blockchain
-
+            // web3.setProvider(new web3.providers.HttpProvider(“http:\/\/localhost:8545"))
             let atomic_swap_contract = new web3.eth.Contract(jsonInterface) // Instantiate the contract
 
-            
+
         }
     </script>
 
