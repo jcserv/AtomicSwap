@@ -1,5 +1,10 @@
 var ethWeb3js = null;
 
+$("#walletInfo").hide();
+$("#createContractInfo").hide();
+$("#createAionContractInfo").hide();
+$("#LockEthFundsInfo").hide();
+
 window.addEventListener('load', function() {
 
   var appPrepared = true;
@@ -25,34 +30,13 @@ window.addEventListener('load', function() {
     console.log('Aion web3 not detected, Need to install Wallets for Aion.');
   }
 
-
-
-  // Obtaining Wallet and Account information
-  //console.log('===================================');
-  //console.log('Eth address  : ' + ethWeb3js);
-  //console.log('Aion address : ' + accountAddress);
-  //console.log('===================================');
-
-  //$("#btnInitAS").html("WOW");
-
-
-  // Grab the contract instance
-  // #1 Ethereum
-
-  // #2 AION
-
-
-
   // Now you can start your app & access web3 freely:
   if(appPrepared){
 
 
-    $("#btnInitAS").click(async function(){
+    $("#btnDisplayWalletInfo").click(async function(){
       const aiwaAccountAddress = await aiwa.enable();
-      // ethWeb3js.eth.accounts  ---> can return [] 
-      //console.log(aiwaAccountAddress[0]);
-
-      startApp();
+      walletInfo();
     });
 
   }
@@ -60,17 +44,23 @@ window.addEventListener('load', function() {
     console.log('Follow the steps above to proceed.')
 });
 
-
-async function startApp(){
-  const aiwaAccountAddress = await aiwa.enable();
+async function walletInfo(){
+  const aiwaAccountAddresses = await aiwa.enable();
+  const aiwaAccountAddress = aiwaAccountAddresses[0];
+  const ethAccountAddress = ethWeb3js.eth.accounts;
 
   console.log('===================================');
-  console.log('Atomic Swap Prtocol')
+  console.log('Wallet Info')
   console.log('===================================');
-  console.log('Eth address  : ' + ethWeb3js.eth.accounts);
+  console.log('Eth address  : ' + ethAccountAddress);
   console.log('Aion address : ' + aiwaAccountAddress);
   console.log('===================================');
 
+  $("#walletInfo").show();
+
+  $("#userEthAddr").html(ethAccountAddress);
+  $("#userAionAddr").html(aiwaAccountAddress);
 
 
+  $("#createContractInfo").show();
 }
