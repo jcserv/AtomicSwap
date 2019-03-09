@@ -49,5 +49,5 @@ contract HashTimeLock{
     }
 
     // Fallback function that allows locker to store funds.
-    function () payable onlyLocker{}
+    function () external payable onlyLocker{}
 }
