@@ -18,6 +18,18 @@ public class HashTimeLock
 
     private static boolean isSecretPublished;
 
+    public static void init() {
+        assetLocker = new Address(hexStringToByteArray("a0520da54257ed18675207757b7da94251f83ddd6ba3b46a17bd87c3ace697b4"));
+        assetFetcher = new Address(hexStringToByteArray("a0c5a1ea938a4b4f242039923da39177468817dbff8230d13b2d42bf35ccc212"));
+        startBlockNumber = BlockchainRuntime.getBlockNumber();
+        endBlockNumber = startBlockNumber + 1500;
+        hashOfSecret = BlockchainRuntime.keccak256(hexStringToByteArray("a0520da54257ed18675207757b7da947468817dbff8230d13b2d42bf35ccc212"));
+        isSecretPublished = false;
+
+        transfer(assetFetcher, BigInteger.TEN);
+    
+    }
+
     public static void constructor(Address _assetLocker, Address _assetFetcher, int periodBlockNumber, byte[] _hashOfSecret) {
         assetLocker = _assetLocker;
         assetFetcher = _assetFetcher;
@@ -32,17 +44,26 @@ public class HashTimeLock
     }
 
     public void returnToLocker() {
-        if (BlockchainRuntime.getBlockNumber() >= endBlockNumber) {
-            transfer(assetLocker, BlockchainRuntime.getBalance(assetLocker));
-        }
+        BlockchainRuntime.require(BlockchainRuntime.getBlockNumber() >= endBlockNumber);
+        transfer(assetLocker, BlockchainRuntime.getBalance(assetLocker));
     }
 
     public static void sendToFetcher(byte[] _secret) {
-        if (BlockchainRuntime.getBlockNumber() < endBlockNumber && BlockchainRuntime.keccak256(secret) == hashOfSecret) {
-            transfer(assetFetcher, BlockchainRuntime.getBalance(assetFetcher));
-            isSecretPublished = true;
-            secret = _secret;
+        BlockchainRuntime.require(BlockchainRuntime.getBlockNumber() < endBlockNumber);
+        BlockchainRuntime.require(BlockchainRuntime.keccak256(secret) == hashOfSecret);
+        transfer(assetFetcher, BlockchainRuntime.getBalance(assetFetcher));
+        isSecretPublished = true;
+        secret = _secret;
+    }
+
+    public static byte[] hexStringToByteArray(String s) {
+        int len = s.length();
+        byte[] data = new byte[len / 2];
+        for (int i = 0; i < len; i += 2) {
+            data[i / 2] = (byte) ((Character.digit(s.charAt(i), 16) << 4)
+                                 + Character.digit(s.charAt(i+1), 16));
         }
+        return data;
     }
 
     //main should be last function
