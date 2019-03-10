@@ -51,3 +51,18 @@ contract HashTimeLock{
     // Fallback function that allows locker to store funds.
     function () external payable onlyLocker{}
 }
+
+
+
+contract HTLCFactory{
+    constructor() public {}
+
+    // when deploy HTLC
+    function deployHTLC(address _Locker, address _Fetcher, uint _periodBlockNumber, bytes32 _hashOfSecret) public returns(address payable){
+        HashTimeLock htlcInstance = new HashTimeLock(_Locker, _Fetcher, _periodBlockNumber, _hashOfSecret);
+        address(htlcInstance).transfer(msg.value);
+        return address(htlcInstance);
+    }
+    
+}
+
