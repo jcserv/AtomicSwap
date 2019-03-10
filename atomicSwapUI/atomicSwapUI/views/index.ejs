@@ -4,6 +4,7 @@
     <title><%= title %></title>
     <link rel='stylesheet' href='/stylesheets/style.css' />
     <script src='/javascripts/jquery-3.3.1.min.js'></script>
+    <script src='/javascripts/ethHashTimeLockContract.js'></script>
   </head>
   <body>
     <h1><%= title %></h1>
@@ -18,11 +19,25 @@
       <p>Address: <span id='userAionAddr'></span></p>
     </span>
 
-    <h2>Work in Progress</h2>
-
-    <span id='createContractInfo'>
+    <span id='createEthContractInfo'>
       <p><button value='createEthContract' id='btnCreateEthContract'>Create Ethereum Contract</button></p>
+      <p><span id='ethContractDeploymentStatus'></span></p>
+      <p>Ethereum Contract Address: <span id='ethContractAddr'></span></p>
     </span>
+
+      <span id='LockEthFundsInfo'>
+        <p><button value='LockEthFunds' id='btnLockEthFunds'>Lock Ethereum Funds</button></p>
+      </span>
+
+      <span id='FetchEthFundsInfo'>
+        <p><button value='FetchEthFunds' id='btnFetchEthFunds'>Fetch Ethereum Funds</button></p>
+      </span>
+
+      <span id='ReturnEthFundsInfo'>
+        <p><button value='ReturnEthFunds' id='btnReturnEthFunds'>Return Ethereum Funds</button></p>
+      </span>      
+
+    <h2>Work in Progress</h2>
 
     <h2> Not working </h2>
 
@@ -30,9 +45,6 @@
       <p><button value='createAionContract' id='btnCreateAionContract'>Create Aion Contract</button></p>
     </span>
 
-    <span id='LockEthFundsInfo'>
-      <p><button value='LockEthFunds' id='btnLockEthFunds'>Lock Ethereum Funds</button></p>
-    </span>
 
   </body>
 <script src='/javascripts/envSetup.js'></script>
