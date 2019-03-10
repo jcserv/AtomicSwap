@@ -38725,17 +38725,24 @@ module.exports = XMLHttpRequest;
 var ethHTLCFactoryAddr = "0x1724673fedddb27008177f78522c296d41b9ae16";
 
 $("#walletInfo").hide();
-$("#createContractInfo").hide();
-$("#createAionContractInfo").hide();
+
+/*
+$("#createEthContractInfo").hide();
 $("#LockEthFundsInfo").hide();
 $("#FetchEthFundsInfo").hide();
 $("#ReturnEthFundsInfo").hide();
-$("#createAionContractInfo").hide();
+
+$("#createAionSolContractInfo").hide();
+$("#LockAionSolFundsInfo").hide();
+$("#FetchAionSolFundsInfo").hide();
+$("#ReturnAionSolFundsInfo").hide();
+*/
 
 var ethWeb3js = require('web3');
+//var aionWeb3js = require('aion-web3');
 
 ethweb3 = new ethWeb3js(web3.currentProvider || "ws://localhost:8546");
-
+//aionweb3 = new aionWeb3js(aionweb3.currentProvider);
 
 window.addEventListener('load', function() {
 
@@ -38811,15 +38818,28 @@ async function walletInfo(){
   aiwaAccountAddresses = await aiwa.enable();
   aiwaAccountAddress = aiwaAccountAddresses[0];
 
-  ethAccountBalance = null;
-  aiwaAccountBalance = null;
+  // setting default account
+  aionweb3.eth.defaultAccount = aiwaAccountAddress;
 
+  ethAccountBalance = null;
+  aiwaAccountBalance = null ;
+
+  aionweb3.eth.getBalance(aiwaAccountAddress, (error, result) => {
+    aiwaAccountBalance=result;
+  });
+
+  //try {
+  //      await aiwaAccountBalance = aionweb3.eth.getBalance(aiwaAccountAddress);
+  //}catch(err){
+  //      console.log(err.message);
+  //}
 
   ethweb3.eth.getBalance( ethAccountAddress, ethweb3.eth.defaultBlock, (error, result) => {
     ethAccountBalance=result;
     printWalletInfo();
   });
 
+  //console.log(aionweb3.eth.getAccounts());
 
   $("#walletInfo").show();
   $("#userEthAddr").html(ethAccountAddress);
@@ -38833,22 +38853,26 @@ function generateSecret(){
 }
 
 
+
+
 async function createEthContract(){
+
+  ethLockFunds = 113113;
+  ethLocker = ethAccountAddress;
+  ethFetcher = ethAccountAddress;
+  ethPeriodBlockNumber = 100;
+  ethSecret = generateSecret();
+  hashOfSecret = ethweb3.sha3(ethSecret, {encoding: 'hex'});
+
+
   ethHTLC = ethweb3.eth.contract(ethHashTimeLockABI);
 
-  LockFunds = 113113;
-  Locker = ethAccountAddress;
-  Fetcher = ethAccountAddress;
-  periodBlockNumber = 100;
-
-  ethSecret = generateSecret();
   console.log(ethSecret);
-  hashOfSecret = ethweb3.sha3(ethSecret, {encoding: 'hex'});
   console.log(hashOfSecret);
 
   $("#ethContractDeploymentStatus").html("Deploying contract...");
 
-  var ethHTLCCreation = ethHTLC.new(Locker, Fetcher, periodBlockNumber, hashOfSecret, 
+  var ethHTLCCreation = ethHTLC.new(ethLocker, ethFetcher, ethPeriodBlockNumber, hashOfSecret, 
       {
         data: '0x'+ethHashTimeLockByteCode.object, 
         from: ethAccountAddress, gas: 1000000
@@ -38878,8 +38902,6 @@ async function createEthContract(){
 
 }
 
-ethFunds = 100;
-
 async function lockEthFunds(){
   // send a transaction to a function
   // myContractInstance.myStateChangingMethod('someParam1', 23, {value: 200, gas: 2000});
@@ -38889,7 +38911,7 @@ async function lockEthFunds(){
   ethweb3.eth.sendTransaction({
     from: ethAccountAddress,
     to: ethContractAddr,
-    value: ethFunds,
+    value: ethLockFunds,
   }, function(err, result){
     console.log("Ethereum funds locked!");
     $("#ReturnEthFundsInfo").show();
@@ -38928,6 +38950,76 @@ async function returnEthFunds(){
   });
 }
 
+
+
+
+$("#btnCreateAionSolContract").click( async function(){
+
+  aionLocker = aiwaAccountAddress;
+  aionFetcher = aiwaAccountAddress;
+  aionPeriodBlockNumber = 50;
+  aionSecret = generateSecret();
+  hashOfSecret = ethweb3.sha3(aionSecret, {encoding: 'hex'});
+
+  aionSolHTLC = aionweb3.eth.contract(aionSolABI);
+
+  $("#aionSolContractDeploymentStatus").html("Contract Deploying...");
+
+  var aionSolHTLCCreation = aionSolHTLC.new(aionLocker, aionFetcher, aionPeriodBlockNumber, hashOfSecret, 
+      {
+        data: '0x'+aionSolByteCode.object, 
+        from: aiwaAccountAddress, gas: 1000000
+      }
+  , function(err, myContract){
+   if(!err) {
+      // NOTE: The callback will fire twice!
+      // Once the contract has the transactionHash property set and once its deployed on an address.
+       // e.g. check tx hash on the first call (transaction send)
+      if(!myContract.address) {
+          console.log("transactionHash:")
+          console.log(myContract.transactionHash) // The hash of the transaction, which deploys the contract
+      
+      // check address on the second call (contract deployed)
+      } else {
+          console.log("contract Address:");
+          $("#aionSolContractDeploymentStatus").html("Contract Deployed");
+          $("#aionSolContractAddr").html(myContract.address);
+          aionSolContractAddr = myContract.address;
+          console.log(myContract.address) // the contract address
+      }
+      // Note that the returned "myContractReturned" === "myContract",
+      // so the returned "myContractReturned" object will also get the address set.
+   }
+ });
+
+/*
+  aionSol = aionweb3.eth.contract(aionSolABI);
+  try {  
+    const code = '0x'+aionSolByteCode.object;
+    //compiled byte code 
+    const tx = { data: code, gas: 510000 }; // bundling it into a transaction object
+    const txHash = await aionweb3.eth.sendTransaction(tx); //sending object
+
+    $("#aionSolContractDeploymentStatus").html("Contract Deployed");
+    $("#aionSolContractAddr").html(txHash);
+
+  }catch (err) {
+    $("#aionSolContractDeploymentStatus").html("Contract Deploy Failure");
+
+  }*/  
+});
+
+async function lockAionSolFunds(){
+
+}
+
+async function fetchAionSolFunds(){
+
+}
+
+async function returnAionSolFunds(){
+
+}
 
 
 },{"web3":191}]},{},[242]);
