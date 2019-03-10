@@ -38928,7 +38928,7 @@ async function fetchEthFunds(){
 
   ethHTLCInstance.sendToFetcher(ethSecret, function(err, result){
     if(!err)
-      console.log("Ethereum funds fetched!");
+      console.log("Ethereum funds fetch request sent!");
     else
        console.error(err);
   });
@@ -38944,7 +38944,7 @@ async function returnEthFunds(){
 
   ethHTLCInstance.returnToLocker(function(err, result){
     if(!err)
-      console.log("Ethereum funds returned!");
+      console.log("Ethereum funds return request sent!");
     else
        console.error(err);
   });
@@ -38955,6 +38955,7 @@ async function returnEthFunds(){
 
 $("#btnCreateAionSolContract").click( async function(){
 
+  aionLockFunds = 114114;
   aionLocker = aiwaAccountAddress;
   aionFetcher = aiwaAccountAddress;
   aionPeriodBlockNumber = 50;
@@ -38992,34 +38993,46 @@ $("#btnCreateAionSolContract").click( async function(){
    }
  });
 
-/*
-  aionSol = aionweb3.eth.contract(aionSolABI);
-  try {  
-    const code = '0x'+aionSolByteCode.object;
-    //compiled byte code 
-    const tx = { data: code, gas: 510000 }; // bundling it into a transaction object
-    const txHash = await aionweb3.eth.sendTransaction(tx); //sending object
-
-    $("#aionSolContractDeploymentStatus").html("Contract Deployed");
-    $("#aionSolContractAddr").html(txHash);
-
-  }catch (err) {
-    $("#aionSolContractDeploymentStatus").html("Contract Deploy Failure");
-
-  }*/  
 });
 
-async function lockAionSolFunds(){
 
-}
+$("#btnLockAionSolFunds").click( async function(){  
+  aionSolHTLC = aionweb3.eth.contract(aionSolABI);
+  aionSolHTLCInstance = aionSolHTLC.at(aionSolContractAddr);
 
-async function fetchAionSolFunds(){
+  aionweb3.eth.sendTransaction({
+    from: aiwaAccountAddress,
+    to: aionSolContractAddr,
+    value: aionLockFunds,
+  }, function(err, result){
+    console.log("Aion funds locked!");   
+  });
+});
 
-}
+$("#btnFetchAionSolFunds").click( async function(){  
+  aionSolHTLC = aionweb3.eth.contract(aionSolABI);
+  aionSolHTLCInstance = aionSolHTLC.at(aionSolContractAddr);
 
-async function returnAionSolFunds(){
+  aionSolHTLCInstance.sendToFetcher(aionSecret, function(err, result){
+    if(!err)
+      console.log("Aion funds fetched!");
+    else
+       console.error(err);
+  });
+});
 
-}
+
+$("#btnReturnEthFunds").click( async function(){  
+  aionSolHTLC = aionweb3.eth.contract(aionSolABI);
+  aionSolHTLCInstance = aionSolHTLC.at(aionSolContractAddr);
+
+  aionSolHTLCInstance.returnToLocker(function(err, result){
+    if(!err)
+      console.log("Ethereum funds returned!");
+    else
+       console.error(err);
+  });
+});
 
 
 },{"web3":191}]},{},[242]);

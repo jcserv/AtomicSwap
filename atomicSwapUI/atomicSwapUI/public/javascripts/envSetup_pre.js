@@ -204,7 +204,7 @@ async function fetchEthFunds(){
 
   ethHTLCInstance.sendToFetcher(ethSecret, function(err, result){
     if(!err)
-      console.log("Ethereum funds fetched!");
+      console.log("Ethereum funds fetch request sent!");
     else
        console.error(err);
   });
@@ -220,7 +220,7 @@ async function returnEthFunds(){
 
   ethHTLCInstance.returnToLocker(function(err, result){
     if(!err)
-      console.log("Ethereum funds returned!");
+      console.log("Ethereum funds return request sent!");
     else
        console.error(err);
   });
@@ -271,7 +271,8 @@ $("#btnCreateAionSolContract").click( async function(){
 
 });
 
-async function lockAionSolFunds(){
+
+$("#btnLockAionSolFunds").click( async function(){  
   aionSolHTLC = aionweb3.eth.contract(aionSolABI);
   aionSolHTLCInstance = aionSolHTLC.at(aionSolContractAddr);
 
@@ -282,9 +283,9 @@ async function lockAionSolFunds(){
   }, function(err, result){
     console.log("Aion funds locked!");   
   });
-}
+});
 
-async function fetchAionSolFunds(){
+$("#btnFetchAionSolFunds").click( async function(){  
   aionSolHTLC = aionweb3.eth.contract(aionSolABI);
   aionSolHTLCInstance = aionSolHTLC.at(aionSolContractAddr);
 
@@ -294,9 +295,10 @@ async function fetchAionSolFunds(){
     else
        console.error(err);
   });
-}
+});
 
-async function returnAionSolFunds(){
+
+$("#btnReturnEthFunds").click( async function(){  
   aionSolHTLC = aionweb3.eth.contract(aionSolABI);
   aionSolHTLCInstance = aionSolHTLC.at(aionSolContractAddr);
 
@@ -306,5 +308,5 @@ async function returnAionSolFunds(){
     else
        console.error(err);
   });
-}
+});
 
