@@ -19,8 +19,8 @@ public class HashTimeLock
     private static boolean isSecretPublished;
 
     public static void init() {
-        assetLocker = new Address(hexStringToByteArray("a0520da54257ed18675207757b7da94251f83ddd6ba3b46a17bd87c3ace697b4"));
-        assetFetcher = new Address(hexStringToByteArray("a0c5a1ea938a4b4f242039923da39177468817dbff8230d13b2d42bf35ccc212"));
+        assetLocker = new Address(hexStringToByteArray(""));
+        assetFetcher = new Address(hexStringToByteArray(""));
         startBlockNumber = BlockchainRuntime.getBlockNumber();
         endBlockNumber = startBlockNumber + 1500;
         hashOfSecret = BlockchainRuntime.keccak256(hexStringToByteArray("a0520da54257ed18675207757b7da947468817dbff8230d13b2d42bf35ccc212"));
