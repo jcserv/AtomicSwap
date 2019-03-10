@@ -1,80 +1,52 @@
 package ETHUofT2019;
 
 import org.aion.avm.api.ABIDecoder;
+import org.aion.avm.api.Address;
+import java.math.BigInteger;
 import org.aion.avm.api.BlockchainRuntime;
 
 public class HashTimeLock
 {
-    public Address assetLocker;
-    public Address assetFetcher;
+    public static Address assetLocker;
+    public static Address assetFetcher;
 
-    public bytes32 hashOfSecret;
-    public byte[] secret;
+    public static byte[] hashOfSecret;
+    public static byte[] secret;
 
-    private int startBlockNumber;
-    private int endBlockNumber;
+    private static long startBlockNumber;
+    private static long endBlockNumber;
 
-    private boolean isSecretPublished;
+    private static boolean isSecretPublished;
 
-    /*static {
-        contractAddress = BlockchainRuntime.getAddress();
-        owner = BlockchainRuntime.getCaller();
-        timestamp = BlockchainRuntime.getBlockTimestamp();
+    public static void constructor(Address _assetLocker, Address _assetFetcher, int periodBlockNumber, byte[] _hashOfSecret) {
+        assetLocker = _assetLocker;
+        assetFetcher = _assetFetcher;
         startBlockNumber = BlockchainRuntime.getBlockNumber();
-    }*/
-
-    HashTimeLock(Address _assetLocker, address _assetFetcher, int periodBlockNumber, bytes[] _hashOfSecret) {
-        this.assetLocker = _assetLocker;
-        this.assetFetcher = _assetFetcher;
-        this.startBlockNUmber = block.number;
-        this.endBlockNumber = this.startBlockNumber + periodBlockNumber;
-        this.hashOfSecret = _hashOfSecret;
-        this.isSecretPublished = false;
-    }
-      
-    // Can be called into other functions to validate the owner of the contract.
-    private static void onlyOwner() {
-        BlockchainRuntime.require(BlockchainRuntime.getCaller().equals(owner));
-    }
-  
-    public static void transferOwnership(Address newOwnerAddress) {
-        onlyOwner();
-        newOwner = newOwnerAddress;
-    }
-  
-    public static void acceptOwnership() {
-        BlockchainRuntime.require(BlockchainRuntime.getCaller().equals(newOwner));
-        owner = newOwner;
-        newOwner = null;
+        endBlockNumber = startBlockNumber + periodBlockNumber;
+        hashOfSecret = _hashOfSecret;
+        isSecretPublished = false;
     }
     
-    public static void transfer(Address to, long value) {
-        onlyOwner();
-        Result result = BlockchainRuntime.call(to, BigInteger.valueOf(value), new byte[0], BlockchainRuntime.getRemainingEnergy());
-          
-        if (result.isSuccess()) {
-        BlockchainRuntime.println("Transfer succeeded. " + BlockchainRuntime.getBalance(to) + " " + BlockchainRuntime.getBalanceOfThisContract());
-        } else {
-          BlockchainRuntime.println("Transfer failed.");
-        }
+    public static void transfer(Address to, BigInteger value) {
+        BlockchainRuntime.call(to, value, new byte[0], BlockchainRuntime.getRemainingEnergy());
     }
 
     public void returnToLocker() {
-        if (block.number >= endBlockNumber) {
-            transfer(this.assetLocker, this.assetLocker.balance);
+        if (BlockchainRuntime.getBlockNumber() >= endBlockNumber) {
+            transfer(assetLocker, BlockchainRuntime.getBalance(assetLocker));
         }
     }
 
     public static void sendToFetcher(byte[] _secret) {
-        if (block.number < endBlockNumber && keccak256(secret) == hashOfSecret) {
-            transfer(this.assetFetcher, this.assetFetcher.balance);
-            this.isSecretPublished = true;
-            this.secret = _secret;
+        if (BlockchainRuntime.getBlockNumber() < endBlockNumber && BlockchainRuntime.keccak256(secret) == hashOfSecret) {
+            transfer(assetFetcher, BlockchainRuntime.getBalance(assetFetcher));
+            isSecretPublished = true;
+            secret = _secret;
         }
     }
 
     //main should be last function
     public static byte[] main() {
-        return ABIDecoder.decodeAndRunWithClass(HelloAvm.class, BlockchainRuntime.getData());
+        return ABIDecoder.decodeAndRunWithClass(HashTimeLock.class, BlockchainRuntime.getData());
     }
 }
