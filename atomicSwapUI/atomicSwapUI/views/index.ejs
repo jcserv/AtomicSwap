@@ -1,0 +1,39 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <title><%= title %></title>
+    <link rel='stylesheet' href='/stylesheets/style.css' />
+    <script src='/javascripts/jquery-3.3.1.min.js'></script>
+  </head>
+  <body>
+    <h1><%= title %></h1>
+    <p>Welcome to <%= title %></p>
+    <p><button value='displayWalletInfo' id='btnDisplayWalletInfo'>Get info from wallets</button></p>
+
+    <span id='walletInfo'>
+      <h3>Ethereum Wallet</h3>
+      <p>Address: <span id='userEthAddr'></span></p>
+
+      <h3>Aion Wallet</h3>
+      <p>Address: <span id='userAionAddr'></span></p>
+    </span>
+
+    <h2>Work in Progress</h2>
+
+    <span id='createContractInfo'>
+      <p><button value='createEthContract' id='btnCreateEthContract'>Create Ethereum Contract</button></p>
+    </span>
+
+    <h2> Not working </h2>
+
+    <span id='createAionContractInfo'>
+      <p><button value='createAionContract' id='btnCreateAionContract'>Create Aion Contract</button></p>
+    </span>
+
+    <span id='LockEthFundsInfo'>
+      <p><button value='LockEthFunds' id='btnLockEthFunds'>Lock Ethereum Funds</button></p>
+    </span>
+
+  </body>
+<script src='/javascripts/envSetup.js'></script>
+</html>

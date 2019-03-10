@@ -1,22 +1,26 @@
 <!DOCTYPE html>
-<html>
-    <head>
-        <meta charset="utf-8" />
-        <meta http-equiv="X-UA-Compatible" content="IE=edge">
-        <title>Atomic Swap</title>
-        <meta name="viewport" content="width=device-width, initial-scale=1">
-    </head>
-    <script src = "./web3.min.js"></script>
-    <script>
-        async function start_process(){
-            let secret = web3.utils.randomHex(32) // Randomly generate the secret word
-            let hash_secret = web3.utils.sha3(secret) // Apply hash to it
-            let web3 = new Web3(Web3.givenProvider); // Connect to blockchain
 
-            let atomic_swap_contract = new web3.eth.Contract(jsonInterface) // Instantiate the contract
 
-            
-        }
-    </script>
+<head>
+    Atomic Swap
+</head>
 
-</html>
+<body>
+
+        <div class="position">
+
+            <h3 class='header'>Grant Access</h3>
+
+            <button id="grantAccess" type="button" class="button">Grant Access</button>
+            <div id="grantsAccess" class='hash'></div>
+            </div>
+        </div>
+
+
+        <script>
+            var sayHello = web3.avm.method("sayHello");
+            var greet = web3.avm.method("greet").argTypes("Mike");
+        </script>
+        <script src="https://ajax.googleapis.com/ajax/libs/jquery/2.1.1/jquery.min.js"></script>
+        <script src="./index.js"></script>  
+<body>
